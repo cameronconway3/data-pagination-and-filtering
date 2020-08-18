@@ -13,6 +13,15 @@ For assistance:
 
 // Globals
 const itemsPerPage = 9;
+// Assigning the UL element with a class of 'student-list' to the variable 'studentList'
+const studentList = document.querySelector(".student-list");
+// Assigning the UL element with a class of 'link-list' to the variable 'pagButtonList'
+const pagButtonList = document.querySelector(".link-list");
+// Assigning the header element (with class 'header') to the variable 'header'
+const header = document.querySelector(".header");
+// Creating a h1 element and assigning it to the variable 'noSearchMatches', will display if no matches found
+const noSearchMatches = document.createElement("h1");
+
 
 /*
 Create the `showPage` function
@@ -23,9 +32,7 @@ function showPage(list, page) {
    const startIndex = (page * itemsPerPage) - itemsPerPage;
    const endIndex = page * itemsPerPage;
 
-   // Assigning the UL element with a class of 'student-list' to the variable 'studentList'
-   const studentList = document.querySelector(".student-list");
-   // Setting the innerHTNL of 'studentList' as empty, removing any students that may have previously been displayed
+   // Setting the innerHTNL of 'studentList' (declared in globals) as empty, removing any students that may have previously been displayed
    studentList.innerHTML = "";
 
    // Looping over the list parameter
@@ -56,10 +63,8 @@ This function will create and insert/append the elements needed for the paginati
 const addPagination = list => {
    // 'numOfPagButtons' stores the amount of pagination buttons needed
    const numOfPagButtons = list.length / itemsPerPage;
-
-   // Assigning the UL element with a class of 'link-list' to the variable 'pagButtonList'
-   const pagButtonList = document.querySelector(".link-list");
-   // Setting the innerHTNL of 'pagButtonList' as empty, removing any pagination buttons that may have previously been displayed
+   
+   // Setting the innerHTNL of 'pagButtonList' (declared in globals) as empty, removing any pagination buttons that may have previously been displayed
    pagButtonList.innerHTML = "";
 
    // Loop through number of pagination buttons (numOfPagButtons) and for each one create the pagination button.
@@ -70,9 +75,11 @@ const addPagination = list => {
       pagButtonList.insertAdjacentHTML('beforeend', pagButtonHTML);
    }
 
-   // Select the first pagination button
-   const firstPagButton = pagButtonList.firstElementChild.children[0];
-   firstPagButton.className = "active";
+   // If the pagination buttons exist - select the first pagination button
+   if(pagButtonList > 0) {
+      const firstPagButton = pagButtonList.firstElementChild.children[0];
+      firstPagButton.className = "active";
+   }
 
    // Adds an event listener on 'pagButtonList' to listen out for a click
    pagButtonList.addEventListener("click", (e) => {
@@ -129,8 +136,7 @@ const createSearchComponent = () => {
    searchImg.setAttribute("alt", "Search icon");
    searchButton.appendChild(searchImg);
 
-   // Append 'searchLabel' to the end of the 'header' element
-   const header = document.querySelector(".header");
+   // Append 'searchLabel' to the end of the 'header' element (declared in globals)
    header.appendChild(searchLabel);
 } 
 
@@ -141,8 +147,8 @@ createSearchComponent();
 const searchInput = document.querySelector("#search");
 const searchSubmit = document.querySelector("#search-button");
 
+// Construct an array of all the student names, concatanate the first and lasrt name into a full name then push this to the array 'studentNames'
 const studentNames = [];
-
 for(let i = 0; i < data.length; i++) {
    let concatNames = (data[i].name.first + " " + data[i].name.last).toLowerCase();
    studentNames.push(concatNames);
@@ -153,35 +159,55 @@ for(let i = 0; i < data.length; i++) {
 This function will create an array of names to search through
 */
 function searchNames(searchInput, names) {
-   console.log(searchInput);
-   // console.log(names);
 
+   // Set 'noSearchMatches' to an empty string at the start of every function call
+   noSearchMatches.innerHTML = "";
+
+   // Create a new array 'filteredStudents' to store the students returned by the search logic
+   let filteredStudents = [];
+
+   // Count how many matches are returned from the seach logic
+   let resultsCounter = 0;
+
+   // loop through all the students, if 'searchInput' is not 0 and included within the student names then add that student data to 'filteredStudents'
    for(let i = 0; i < names.length; i++) {
       if( searchInput !== 0 && names[i].toLowerCase().includes(searchInput.toLowerCase()) ) {
-         console.log("Match");
+         filteredStudents.push(data[i]);
+         resultsCounter++;
       }
    }
+
+   // If 'returnCounter' has no matches update the innerHTML of 'noSearchMatches' and add it to the parent of 'studentList'
+   if(resultsCounter == 0) {
+      noSearchMatches.innerHTML = "No results found";
+      studentList.parentElement.appendChild(noSearchMatches);
+   }
+
+   // Update the page with the new student list 'filteredStudents' and reflec this change with the pagination
+   showPage(filteredStudents, 1);
+   addPagination(filteredStudents);
+
 }
 
-
+// Add an event listerner on 'searchSubmit' button to listen for a click event
 searchSubmit.addEventListener("click", (e) => {
    e.preventDefault();
 
-   // Get the value of the input when 'searchSubmit' is clicked
+   // Get the value of 'searchInput' the input when 'searchSubmit' is clicked
    let submitValue = searchSubmit.previousElementSibling.value;
 
-
+   // Search for 'submitValue' within 'studentNames'
    searchNames(submitValue, studentNames);
 
 });
 
+// Add an event listerner on 'searchInput' button to listen for a keyup event
+searchInput.addEventListener("keyup", (e) => {
 
-// searchInput.addEventListener("keyup", (e) => {
+   // Get the value of the input when a keyup event is performed 'searchInput'
+   let inputValue = e.target.value;
 
-//    // Get the value of the input when a keyup event is performed 'searchInput'
-//    let inputValue = e.target.value;
-   
+   // Search for 'inputValue' within 'studentNames'
+   searchNames(inputValue, studentNames);
 
-//    searchNames(inputValue, studentNames);
-
-// });
+});
