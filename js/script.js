@@ -14,7 +14,6 @@ For assistance:
 // Globals
 const itemsPerPage = 9;
 
-
 /*
 Create the `showPage` function
 This function will create and insert/append the elements needed to display a "page" of nine students
@@ -49,7 +48,6 @@ function showPage(list, page) {
       }
    }
 }
-
 
 /*
 Create the `addPagination` function
@@ -96,3 +94,94 @@ const addPagination = list => {
 // Call functions
 showPage(data, 1);
 addPagination(data);
+
+
+/*
+Extra Credit
+*/
+
+/*
+`createSearchComponent` function
+This function will create and insert/append the search component
+*/
+const createSearchComponent = () => {
+   // Create the search label
+   const searchLabel = document.createElement("label");
+   searchLabel.setAttribute("for", "search");
+   searchLabel.setAttribute("class", "student-search");
+
+   // Create and append 'nameInput' to 'searchLabel'
+   const nameInput = document.createElement("input");
+   nameInput.setAttribute("id", "search");
+   nameInput.setAttribute("placeholder", "Search by name...");
+   searchLabel.appendChild(nameInput);
+
+   // Create and append 'searchButton' to 'searchLabel'
+   const searchButton = document.createElement("button");
+   // Creating an ID for future reference
+   searchButton.setAttribute("id", "search-button");
+   searchButton.setAttribute("type", "button");
+   searchLabel.appendChild(searchButton);
+
+   // Create and append 'searchImg' to 'searchButton'
+   const searchImg = document.createElement("img");
+   searchImg.setAttribute("src", "img/icn-search.svg");
+   searchImg.setAttribute("alt", "Search icon");
+   searchButton.appendChild(searchImg);
+
+   // Append 'searchLabel' to the end of the 'header' element
+   const header = document.querySelector(".header");
+   header.appendChild(searchLabel);
+} 
+
+createSearchComponent();
+
+
+// Variables to referencing the input (searchInput) and the search button (searchSubmit)
+const searchInput = document.querySelector("#search");
+const searchSubmit = document.querySelector("#search-button");
+
+const studentNames = [];
+
+for(let i = 0; i < data.length; i++) {
+   let concatNames = (data[i].name.first + " " + data[i].name.last).toLowerCase();
+   studentNames.push(concatNames);
+}
+
+/*
+`searchNames` function
+This function will create an array of names to search through
+*/
+function searchNames(searchInput, names) {
+   console.log(searchInput);
+   // console.log(names);
+
+   for(let i = 0; i < names.length; i++) {
+      if( searchInput !== 0 && names[i].toLowerCase().includes(searchInput.toLowerCase()) ) {
+         console.log("Match");
+      }
+   }
+}
+
+
+searchSubmit.addEventListener("click", (e) => {
+   e.preventDefault();
+
+   // Get the value of the input when 'searchSubmit' is clicked
+   let submitValue = searchSubmit.previousElementSibling.value;
+
+
+   searchNames(submitValue, studentNames);
+
+});
+
+
+// searchInput.addEventListener("keyup", (e) => {
+
+//    // Get the value of the input when a keyup event is performed 'searchInput'
+//    let inputValue = e.target.value;
+   
+
+//    searchNames(inputValue, studentNames);
+
+// });
