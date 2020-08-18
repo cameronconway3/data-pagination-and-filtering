@@ -11,101 +11,88 @@ For assistance:
    Reach out in your Slack community: https://treehouse-fsjs-102.slack.com/app_redirect?channel=unit-2
 */
 
-// Global Variables
-
-// Assigning the UL element with a class of 'student-list' to a variable 'studentListUL'
-const studentListItems = document.querySelector(".student-list");
-// Define how many items are to be used per page
+// Globals
 const itemsPerPage = 9;
-// Assigning the UL elment with the class of 'link-list' to a variable 'linkListUL'
-const paginationLink = document.querySelector(".link-list");
+
 
 /*
 Create the `showPage` function
 This function will create and insert/append the elements needed to display a "page" of nine students
 */
 function showPage(list, page) {
-   // Setting up the variables to store the start index and the end index of the list items to be displayed
+   // Creating two variables to store the start index and the end index of the list items to be displayed
    const startIndex = (page * itemsPerPage) - itemsPerPage;
    const endIndex = page * itemsPerPage;
 
-   // Setting the innerHTML of 'studentListUL' to an empty string. Makeing sure any previously displayed students are removed
-   studentListItems.innerHTML = "";
+   // Assigning the UL element with a class of 'student-list' to the variable 'studentList'
+   const studentList = document.querySelector(".student-list");
+   // Setting the innerHTNL of 'studentList' as empty, removing any students that may have previously been displayed
+   studentList.innerHTML = "";
 
-   // Looping over the list parameter (dataList)
+   // Looping over the list parameter
    for(let i = 0; i < list.length; i++) {
+      // Conditional that checks if the current index is greater than or equal to 'startIndex' and less than 'endIndex'
       if(i >= startIndex && i < endIndex) {
-         // Build the HTML used to insert into 'studentListUL'
-         let studentHTML = "";
-         studentHTML += `<li class="student-item cf">`;
-         studentHTML += `<div class="student-details">`;
-         studentHTML += `<img class="avatar" src=${list[i].picture.large} alt="Profile Picture">`;
-         studentHTML += `<h3>${list[i].name.first} ${list[i].name.last}</h3>`;
-         studentHTML += `<span class="email">${list[i].email}</span>`;
-         studentHTML += `</div>`;
-         studentHTML += `<div class="joined-details">`;
-         studentHTML += `<span class="date">Joined ${list[i].registered.date}</span>`;
-         studentHTML += `</div>`;
-         studentHTML += `</li>`;
-   
-         studentListItems.insertAdjacentHTML('beforeend', studentHTML);
+          // Build the HTML used to insert into 'studentList'
+          let studentHTML = `<li class="student-item cf">`;
+          studentHTML += `<div class="student-details">`;
+          studentHTML += `<img class="avatar" src=${list[i].picture.large} alt="Profile Picture">`;
+          studentHTML += `<h3>${list[i].name.first} ${list[i].name.last}</h3>`;
+          studentHTML += `<span class="email">${list[i].email}</span>`;
+          studentHTML += `</div>`;
+          studentHTML += `<div class="joined-details">`;
+          studentHTML += `<span class="date">Joined ${list[i].registered.date}</span>`;
+          studentHTML += `</div>`;
+          studentHTML += `</li>`;
+         // Inserting the 'studentHTML' string into to 'studentList' variable
+         studentList.insertAdjacentHTML('beforeend', studentHTML);
       }
    }
 }
+
 
 /*
 Create the `addPagination` function
 This function will create and insert/append the elements needed for the pagination buttons
 */
 const addPagination = list => {
+   // 'numOfPagButtons' stores the amount of pagination buttons needed
    const numOfPagButtons = list.length / itemsPerPage;
-   
-   // Setting the innerHTML of 'paginationLink' to an empty string. Makeing sure any previously displayed buttons are removed
-   paginationLink.innerHTML = "";
 
+   // Assigning the UL element with a class of 'link-list' to the variable 'pagButtonList'
+   const pagButtonList = document.querySelector(".link-list");
+   // Setting the innerHTNL of 'pagButtonList' as empty, removing any pagination buttons that may have previously been displayed
+   pagButtonList.innerHTML = "";
+
+   // Loop through number of pagination buttons (numOfPagButtons) and for each one create the pagination button.
    for(let i = 0; i < numOfPagButtons; i++) {
-      let pagButtonHTML = "";
-      pagButtonHTML += `<li>`;
+      let pagButtonHTML = `<li>`;
       pagButtonHTML += `<button type="button">${i+1}</button>`;
       pagButtonHTML += `</li>`;
-      paginationLink.insertAdjacentHTML('beforeend', pagButtonHTML);
+      pagButtonList.insertAdjacentHTML('beforeend', pagButtonHTML);
    }
 
-   // Selecting the first pagination button using the firstElementChild method and giving it a class of active
-   const firstPagButton = paginationLink.firstElementChild;
+   // Select the first pagination button
+   const firstPagButton = pagButtonList.firstElementChild.children[0];
    firstPagButton.className = "active";
 
-   const paginationButtons = paginationLink.children;
-
-
-   for(let i = 0; i < paginationButtons.length; i++) {
-
-      // Creating an event listener to listen for clicks on the 'paginationLink' variable
-      paginationButtons[i].addEventListener("click", (e) => {
-         if(e.target.tagName = "BUTTON") {
-
-            for(let i = 0; i < paginationButtons.length; i++) {
-               paginationButtons[i].classList.remove("active");
-               e.target.className = "";
-            }
-            
-            paginationButtons[i].className = "active";
-
-            e.target.className = "active";
-
-            // Get the current page number
-            showPage(list, e.target.textContent);
-
+   // Adds an event listener on 'pagButtonList' to listen out for a click
+   pagButtonList.addEventListener("click", (e) => {
+      // Only carry out logic if the event is targeted on a button
+      // console.log(pagButtonList);
+      if(e.target.tagName == "BUTTON") {
+         for(let i = 0; i < pagButtonList.children.length; i++) {
+            pagButtonList.children[i].children[0].classList.remove("active");
          }
-         console.log(paginationButtons);
-      });
-   }
+         // Add the active class to the button that the event was called on
+         e.target.className = "active";
 
-
+         // Call the 'showPage' function
+         showPage(list, e.target.textContent);
+      }
+   });
 }
-
 
 // Call functions
 showPage(data, 1);
-
 addPagination(data);
