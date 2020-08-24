@@ -69,14 +69,15 @@ const addPagination = list => {
 
    // Loop through number of pagination buttons (numOfPagButtons) and for each one create the pagination button.
    for(let i = 0; i < numOfPagButtons; i++) {
-      let pagButtonHTML = `<li>`;
+      // Add a class of 'paginationLI' so the list items can be accessed later in the code
+      let pagButtonHTML = `<li class="paginationLI">`;
       pagButtonHTML += `<button type="button">${i+1}</button>`;
       pagButtonHTML += `</li>`;
       pagButtonList.insertAdjacentHTML('beforeend', pagButtonHTML);
    }
 
-   // If the pagination buttons exist - select the first pagination button
-   if(pagButtonList > 0) {
+   // If the pagination buttons with class of 'paginationLI' are not displayed don't add a class to the first pagination button as it is not visible in the DOM
+   if(document.querySelector('.paginationLI')) {
       const firstPagButton = pagButtonList.firstElementChild.children[0];
       firstPagButton.className = "active";
    }
