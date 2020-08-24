@@ -3,7 +3,7 @@ Treehouse Techdegree:
 FSJS Project 2 - Data Pagination and Filtering
 */
 
-
+// I would like my project to be rejected if I do not meet the Exceeds Expectations Requirements
 
 /*
 For assistance:
@@ -11,7 +11,9 @@ For assistance:
    Reach out in your Slack community: https://treehouse-fsjs-102.slack.com/app_redirect?channel=unit-2
 */
 
-// Globals
+/* 
+Globals
+*/
 const itemsPerPage = 9;
 // Assigning the UL element with a class of 'student-list' to the variable 'studentList'
 const studentList = document.querySelector(".student-list");
@@ -21,7 +23,6 @@ const pagButtonList = document.querySelector(".link-list");
 const header = document.querySelector(".header");
 // Creating a h1 element and assigning it to the variable 'noSearchMatches', will display if no matches found
 const noSearchMatches = document.createElement("h1");
-
 
 /*
 Create the `showPage` function
@@ -103,7 +104,6 @@ const addPagination = list => {
 showPage(data, 1);
 addPagination(data);
 
-
 /*
 Extra Credit
 */
@@ -141,8 +141,8 @@ const createSearchComponent = () => {
    header.appendChild(searchLabel);
 } 
 
+// Calling the function to create the search component
 createSearchComponent();
-
 
 // Variables to referencing the input (searchInput) and the search button (searchSubmit)
 const searchInput = document.querySelector("#search");
@@ -187,7 +187,6 @@ function searchNames(searchInput, names) {
    // Update the page with the new student list 'filteredStudents' and reflec this change with the pagination
    showPage(filteredStudents, 1);
    addPagination(filteredStudents);
-
 }
 
 // Add an event listerner on 'searchSubmit' button to listen for a click event
@@ -199,7 +198,6 @@ searchSubmit.addEventListener("click", (e) => {
 
    // Search for 'submitValue' within 'studentNames'
    searchNames(submitValue, studentNames);
-
 });
 
 // Add an event listerner on 'searchInput' button to listen for a keyup event
@@ -210,5 +208,4 @@ searchInput.addEventListener("keyup", (e) => {
 
    // Search for 'inputValue' within 'studentNames'
    searchNames(inputValue, studentNames);
-
 });
