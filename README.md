@@ -1,2 +1,2 @@
-# techdegree-project-2
- Full Stack JavaScript Techdegree - Project 2 - Data Pagination and Filtering 
+# Data Pagination and Filtering
+ Enhance the usability of a student address book application using pagination and search filtering.
